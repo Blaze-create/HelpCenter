@@ -1,0 +1,269 @@
+.container-fluid {
+    padding: 0;
+    margin: 0;
+}
+
+.home-wrapper {
+    height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 100%), url("../img/bg.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+        color: white;
+        margin: 20px 0;
+        letter-spacing: 10px;
+    }
+
+    .form-wrapper {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        min-height: 300px;
+        min-width: 300px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        padding: 20px 20px;
+
+        .logo {
+
+            img {
+                margin: 0;
+                padding: 0;
+                width: 150px;
+            }
+        }
+
+        .error {
+            opacity: 0;
+            font-size: 10px;
+            width: 100%;
+            color: yellow;
+            margin-left: 20px;
+        }
+
+        .title {
+            text-transform: capitalize;
+            font-weight: 700;
+            font-size: 30px;
+            letter-spacing: 9px;
+            margin-bottom: 30px;
+        }
+
+        .remember {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+            width: 100%;
+            padding: 0 15px;
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            .member {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+            }
+        }
+
+        .input-grp {
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 10px;
+
+            &:focus-within {
+                border-color: rgb(82, 200, 255);
+                color: rgb(82, 200, 255);
+            }
+
+            i {
+                margin: 0 10px;
+            }
+
+            input {
+                background: none;
+                outline: none;
+                border: none;
+                color: white;
+                min-width: 300px;
+
+                &::placeholder {
+                    color: white;
+                    opacity: 1;
+                }
+            }
+        }
+
+        .submit-grp {
+            width: 100%;
+            padding: 15px;
+
+            input {
+                border: none;
+                background: white;
+                width: 100%;
+                border-radius: 50px;
+                height: 40px;
+                font-weight: 400;
+                letter-spacing: 3px;
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    background: rgb(82, 200, 255);
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.faq-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .faq {
+        width: 100%;
+        max-width: 800px;
+    }
+}
+
+.create-ticket-wrapper {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .create-ticket {
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid rgba(114, 114, 114, 0.3);
+        border-radius: 10px;
+
+        button {
+            transition: .3s ease-in-out;
+        }
+
+        span {
+            font-weight: bold;
+
+
+            &:hover+button {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+.table-wrapper {
+    background: white;
+    border: 1px solid rgba(114, 114, 114, 0.3);
+    border-radius: 10px;
+    margin: 20px;
+    padding: 25px;
+
+    table {
+        width: 100%;
+        text-align: center;
+
+        thead {
+            border-bottom: 1px solid rgb(218, 218, 218);
+
+            tr {
+                th {
+                    padding-bottom: 25px;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid rgb(238, 237, 237);
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                td {
+                    padding: 10px 0;
+                    color: #666;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    /* Prevents text from wrapping */
+                    overflow: hidden;
+                    /* Hides overflowed text */
+                    text-overflow: ellipsis;
+                    max-width: 150px;
+                    position: relative;
+
+                    span {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 10px;
+                        padding: 3px 5px;
+
+                        &.open {
+                            background: #0096FF;
+                            color: white;
+
+                            &::before {
+                                content: 'Open';
+
+                            }
+                        }
+
+                        &.resolve {
+                            background: #50C878;
+                            color: white;
+
+                            &::before {
+                                content: 'resolve';
+                            }
+                        }
+
+                        &.inprogress {
+                            background: #FFAC1C;
+                            color: white;
+
+                            &::before {
+                                content: 'In Progress';
+                            }
+                        }
+                        &.closed {
+                            background: #880808;
+                            color: white;
+
+                            &::before {
+                                content: 'Closed';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
