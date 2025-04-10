@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="home-wrapper">
             <h1>HelpCenter ICT</h1>
-            <form class="form-wrapper" id="loginForm" method="POST" action="{{ route('login') }}">
+            <form class="form-wrapper" id="loginForm" method="POST" action="{{ route('user.login') }}">
                 @csrf
                 <div class="logo">
                     <img src="img/logo.png" alt="">

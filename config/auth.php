@@ -42,6 +42,7 @@ return [
         ],
     ],
 
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -64,7 +65,6 @@ return [
             'driver' => 'ldap',
             'model' => LdapRecord\Models\ActiveDirectory\User::class,
         ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -1,26 +1,29 @@
 @extends('layouts.default')
 @section('content')
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark" style="padding-right: 10px;padding-left: 10px  ;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="img/logo.png" alt="Logo" width="30" class="d-inline-block align-text-top">
                 HelpCenter ICT
             </a>
             <span class="navbar-text">
-                Welcome, Castel Charles Nicolas
+                Welcome, {{ $cn }}&nbsp&nbsp
             </span>
         </div>
+        <form class="justify-content-end" method="post" action="{{ route('logout') }}">
+            @csrf
+            <button class="btn btn-danger" type="submit">Logout</button>
+        </form>
     </nav>
-
     <div class="container">
         <div class="create-ticket-wrapper">
             <div class="create-ticket">
-                <span> Are we having issues with your device?</span>
-                <button type="button" class="btn btn-primary">Create Ticket</button>
+                <span> Are you having issues with your device?</span>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_ticket">Create
+                    Ticket</button>
             </div>
         </div>
     </div>
-
     <div class="container">
         <div class="issue-wrapper">
             <div class="issue">
@@ -39,74 +42,18 @@
                                 </tr>
                             </thead>
                             <tbody id="table-body">
-                                <tr>
-                                    <td>2 day ago</td>
-                                    <td>Issue with Network</td>
-                                    <td data-bs-toggle="tooltip"
-                                        data-bs-title="The computer crashes randomly during usage. When the crash occurs, the screen goes black, and the system completely freezes. I am unable to use the mouse or keyboard, and the computer doesn't respond to any input. I have to hold down the power button for 10 seconds to force a shutdown and then restart the computer. Upon restarting, I get the error message: Your PC ran into a problem and needs to restart. We’re just collecting some error info, and then we’ll restart for you Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa,
-                                    debitis?
-                                    Aliquid perferendis labore sapiente officiis ipsam placeat officia autem
-                                    repellat.">
-                                        The computer crashes randomly during usage. When the crash occurs,
-                                        the screen goes black, and the system completely freezes. I am unable to use the
-                                        mouse or keyboard, and the computer doesn't respond to any input. I have to hold
-                                        down the power button for 10 seconds to force a shutdown and then restart the
-                                        computer. Upon restarting, I get the error message: Your PC ran into a problem
-                                        and needs to restart. We’re just collecting some error info, and then we’ll
-                                        restart for you Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa,
-                                        debitis?
-                                        Aliquid perferendis labore sapiente officiis ipsam placeat officia autem
-                                        repellat</td>
-                                    <td>2 photo</td>
-                                    <td>Baptise Luc Goelson</td>
-                                    <td><span class="open"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>2 Months ago</td>
-                                    <td>Issue with Network</td>
-                                    <td data-bs-toggle="tooltip"
-                                        data-bs-title="The internet connection drops intermittently. When the connection is lost, all online services stop working, and I cannot access any websites or services. Sometimes, the connection automatically reconnects, but other times, I have to manually disable and re-enable the network adapter. The issue happens randomly and can last anywhere from a few seconds to several minutes. I have checked the router and modem, and they seem to be working fine. It happens with both wired and wireless connections.">
-                                        The internet connection drops intermittently. When the connection is lost, all
-                                        online services stop working, and I cannot access any websites or services.
-                                        Sometimes, the connection automatically reconnects, but other times, I have to
-                                        manually disable and re-enable the network adapter. The issue happens randomly
-                                        and can last anywhere from a few seconds to several minutes. I have checked the
-                                        router and modem, and they seem to be working fine. It happens with both wired
-                                        and wireless connections.</td>
-                                    <td>1 photo</td>
-                                    <td>Marie Dupont</td>
-                                    <td><span class="inprogress"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>2 years ago</td>
-                                    <td>Printer Malfunction</td>
-                                    <td data-bs-toggle="tooltip"
-                                        data-bs-title="The printer is not responding when I try to print documents. It shows as 'Offline' on my computer, even though it is connected via USB. I have tried restarting both the printer and the computer, but the issue persists. The printer is visible on the network, but when I try to print, nothing happens. Sometimes, the printer display shows an 'Error 404' message, but I'm not sure what that means. The printer was working fine last week.">
-                                        The printer is not responding when I try to print documents. It shows as
-                                        'Offline' on my computer, even though it is connected via USB. I have tried
-                                        restarting both the printer and the computer, but the issue persists. The
-                                        printer is visible on the network, but when I try to print, nothing happens.
-                                        Sometimes, the printer display shows an 'Error 404' message, but I'm not sure
-                                        what that means. The printer was working fine last week.</td>
-                                    <td>2 photos</td>
-                                    <td>John Smith</td>
-                                    <td><span class="resolve"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>1 year ago</td>
-                                    <td>Network Connectivity Issue</td>
-                                    <td data-bs-toggle="tooltip"
-                                        data-bs-title="The internet connection is constantly dropping, and the Wi-Fi signal is very weak. I've tried resetting the router and moving closer to it, but the issue continues. Other devices in the house seem to have no problem connecting, but my laptop keeps disconnecting. I also tried updating the network driver, but the issue persists.">
-                                        The internet connection is constantly dropping, and the Wi-Fi signal is very weak.
-                                        I've tried resetting the router and moving closer to it, but the issue continues.
-                                        Other devices in the house seem to have no problem connecting, but my laptop keeps
-                                        disconnecting. I also tried updating the network driver, but the issue persists.
-                                    </td>
-                                    <td>1 photo</td>
-                                    <td>Jane Doe</td>
-                                    <td><span class="closed"></span></td>
-                                </tr>
-
+                                @foreach ($tickets as $ticket)
+                                    <tr>
+                                        <td>{{ \Carbon\Carbon::parse($ticket->created_at)->diffForHumans() }}</td>
+                                        <td data-bs-toggle="tooltip" data-bs-title="{{ $ticket->title }}">
+                                            {{ $ticket->title }}</td>
+                                        <td data-bs-toggle="tooltip" data-bs-title="{{ $ticket->description }}">
+                                            {{ $ticket->description }}</td>
+                                        <td>{{ $ticket->attachment ?? 'No attachment' }}</td>
+                                        <td>{{ $ticket->assigned_to }}</td>
+                                        <td><span class="{{ $ticket->status }}"></span></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -208,6 +155,45 @@
     </div>
 
 
+    <div class="modal fade" id="add_ticket" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content" id="addForm" method="POST" action="{{ route('submit_ticket') }}">
+                @csrf
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Create New Ticket
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder=""
+                            name="title" />
+                        <div class="form-text" id="basic-addon4">Example: Issue with network</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" name="description"></textarea>
+                        <div class="form-text" id="basic-addon4">Describe the issue, including symptoms, impact and
+                            relevant information.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label"><span style="color: red;">*</span>Attachment<span
+                                style="font-size: 12px;">(Optional)</span></label>
+                        <input class="form-control" type="file" id="formFile" name="attachment">
+                        <div class="form-text" id="basic-addon4">Example: Screenshow</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
     <script>
