@@ -329,6 +329,12 @@
   padding: 10px;
   text-align: left;
 }
+.container-fluid.item-table .item-wrapper .item-row .item-description,
+.container-fluid.item-table .item-wrapper .item-row .item-id,
+.container.item-table .item-wrapper .item-row .item-description,
+.container.item-table .item-wrapper .item-row .item-id {
+  display: none;
+}
 .container-fluid.item-table .item-wrapper .item-row .role,
 .container.item-table .item-wrapper .item-row .role {
   flex-direction: row;
@@ -488,6 +494,58 @@
   align-items: start;
   gap: 15px;
 }
+.modal-ticket .comment {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-direction: column;
+  gap: 15px;
+}
+.modal-ticket .comment .comment-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  flex: 1;
+}
+.modal-ticket .comment .comment-section .a-comment {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: start;
+  gap: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 10px;
+}
+.modal-ticket .comment .comment-section .a-comment .profile {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: blue;
+}
+.modal-ticket .comment .comment-section .a-comment .commentt {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.modal-ticket .comment .comment-section .a-comment .commentt .name {
+  font-size: 10px;
+}
+.modal-ticket .comment .comment-section .a-comment .commentt .the-comment {
+  font-size: 12px;
+}
+.modal-ticket .comment .comment-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
 .modal-ticket .user-info {
   display: flex;
   flex-direction: column;
@@ -495,10 +553,18 @@
   width: 70%;
   flex: 1;
 }
-.modal-ticket .user-info .issue-attachment {
+.modal-ticket .user-info .top-bar {
+  display: flex;
+  gap: 15px;
+}
+.modal-ticket .user-info .top-bar .issue-attachment {
   border-radius: 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 .modal-ticket .user-info .issue-descrip {
   border-radius: 15px;
@@ -512,10 +578,26 @@
 .modal-ticket .user-info .issue-descrip .description {
   font-size: 14px;
 }
+.modal-ticket .user-info .ticketid {
+  border-radius: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 15px;
+}
+.modal-ticket .user-info .ticketid .id,
+.modal-ticket .user-info .ticketid .date {
+  font-size: 13px;
+  line-height: 12px;
+}
 .modal-ticket .user-info .employee-detail {
   border-radius: 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 10px;
+  max-width: 200px;
 }
 .modal-ticket .user-info .employee-detail .commonname,
 .modal-ticket .user-info .employee-detail .department,
@@ -523,12 +605,37 @@
   font-size: 13px;
 }
 .modal-ticket .action {
-  width: 30%;
   border: 1px solid rgba(0, 0, 0, 0.3);
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-evenly;
   padding: 15px;
   border-radius: 15px;
+}
+
+.get-user-ul {
+  margin: 0;
+  padding: 0 10px;
+}
+.get-user-ul .get-user-li {
+  color: black;
+  list-style-type: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  transition: 0.3s ease-in-out;
+}
+.get-user-ul .get-user-li:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.get-user-ul .get-user-li.selected {
+  background: #0178ff;
+  border: 1px solid #0178ff;
+  color: white;
 }/*# sourceMappingURL=style.css.map */

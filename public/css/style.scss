@@ -14,11 +14,9 @@
 .home-wrapper {
   height: 100vh;
   width: 100%;
-  background: radial-gradient(
-      circle,
+  background: radial-gradient(circle,
       rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.8) 100%
-    ),
+      rgba(0, 0, 0, 0.8) 100%),
     url("../img/bg.jpg");
   background-size: cover;
   display: flex;
@@ -182,7 +180,7 @@
     span {
       font-weight: bold;
 
-      &:hover + button {
+      &:hover+button {
         transform: scale(1.1);
       }
     }
@@ -297,6 +295,7 @@
       display: grid; // Keep table heading as a grid
       grid-template-columns: 1fr 2fr 1fr 3fr 2fr 1fr 1fr 1fr;
       font-weight: bold;
+
       &.user {
         grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
       }
@@ -315,6 +314,7 @@
         padding: 10px;
         text-align: left;
       }
+
       .action {
         text-align: center;
       }
@@ -328,6 +328,7 @@
       margin: 5px 0;
       padding: 0 5px;
       border-radius: 15px;
+
       &.user {
         grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
       }
@@ -349,11 +350,18 @@
         padding: 10px;
         text-align: left;
       }
+
+      .item-description,
+      .item-id {
+        display: none;
+      }
+
       .role {
         flex-direction: row;
         justify-content: start;
         align-items: center;
         gap: 5px;
+
         &.admin {
           color: gold;
         }
@@ -386,6 +394,7 @@
 
       .item-action {
         align-items: center;
+
         button {
           padding: 5px 10px;
         }
@@ -505,39 +514,135 @@
   width: 100%;
   margin: 30px 0;
 }
+
 .modal-ticket {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: start;
   gap: 15px;
+
+  .comment {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-self: stretch;
+    flex-direction: column;
+    gap: 15px;
+
+    .comment-section {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      flex: 1;
+
+      .a-comment {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: start;
+        gap: 5px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+        padding: 10px;
+
+        .profile {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: blue;
+        }
+
+        .commentt {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          .name {
+            font-size: 10px;
+          }
+
+          .the-comment {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .comment-input {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 10px;
+    }
+  }
+
   .user-info {
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 70%;
     flex: 1;
-    .issue-attachment {
-      border-radius: 15px;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      padding: 10px;
+
+    .top-bar {
+      display: flex;
+      gap: 15px;
+
+      .issue-attachment {
+        border-radius: 15px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+      }
     }
+
     .issue-descrip {
       border-radius: 15px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 10px;
+
       .title {
         margin-bottom: 10px;
         font-size: 14px;
       }
+
       .description {
         font-size: 14px;
       }
     }
+
+    .ticketid {
+      border-radius: 15px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      flex-direction: column;
+      gap: 15px;
+
+      .id,
+      .date {
+        font-size: 13px;
+        line-height: 12px;
+      }
+    }
+
     .employee-detail {
       border-radius: 15px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 10px;
+      max-width: 200px;
+
       .commonname,
       .department,
       .title {
@@ -545,15 +650,42 @@
       }
     }
   }
+
   .action {
-    width: 30%;
     border: 1px solid rgba(0, 0, 0, 0.3);
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-evenly;
 
     padding: 15px;
     border-radius: 15px;
+  }
+}
+
+.get-user-ul {
+  margin: 0;
+  padding: 0 10px;
+
+  .get-user-li {
+    color: black;
+    list-style-type: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    &.selected {
+      background: #0178ff;
+      border: 1px solid #0178ff;
+      color: white;
+    }
   }
 }

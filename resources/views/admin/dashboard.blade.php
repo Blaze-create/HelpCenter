@@ -33,7 +33,7 @@
         <div class="dashboard-title">
             <div class="title">
                 <h1>Ongoing Tickets</h1>
-                <span>Showing 10 of 50 </span>
+                <span>Showing {{ count($ongoing_tickets) }} of {{ count($ongoing_tickets) }} </span>
             </div>
             <div class="sidetab">
                 <div class="search">
@@ -61,13 +61,21 @@
             @foreach ($ongoing_tickets as $ticket)
                 @php
                     $commonname = '';
-                    $title = '';
+
+                    $titlee = '';
                     $department = '';
+                    $assigned_to = 'unassigned';
                     foreach ($user_cn as $user) {
                         if ($user['samaccountname'] == $ticket->samaccountname) {
                             $commonname = $user['cn'];
                             $titlee = $user['title'];
                             $department = $user['department'];
+                            break;
+                        }
+                    }
+                    foreach ($user_cn as $user) {
+                        if ($user['samaccountname'] == $ticket->assigned_to) {
+                            $assigned_to = $user['cn'];
                             break;
                         }
                     }
@@ -81,6 +89,9 @@
                     }
                 @endphp
                 <div class="item-row">
+                    <div class="item-id">
+                        {{ $ticket->id }}
+                    </div>
                     <div class="date">
                         {{ \Carbon\Carbon::parse($ticket->created_at)->diffForHumans() }}
                     </div>
@@ -101,11 +112,15 @@
                     <div class="item-title">
                         {{ $ticket->title }}
                     </div>
+                    <div class="item-description">
+                        {{ $ticket->description }}
+                    </div>
                     <div class="item-assignment">
-                        {{ $ticket->assigned_to }}
+                        {{ $assigned_to }}
                     </div>
                     <div class="priority">
-                        <span class="low"></span>
+                        <span
+                            class="{{ $ticket->priority === 'unassigned' ? 'low' : strtolower($ticket->priority) }}"></span>
                     </div>
                     <div class="item-status">
                         <span class="{{ $status }}"></span>
@@ -301,72 +316,117 @@
                 <div class="modal-body">
                     <div class="modal-ticket">
                         <div class="user-info">
-                            <div class="employee-detail">
-                                <label for="" class="form-label">Employee Details</label>
-                                <div class="commonname">
-                                    Castel Charles Nicolas
+                            <div class="top-bar">
+                                <div class="ticketid">
+                                    <div class="id">
+                                        <label for="" class="form-label">Ticket Number:</label> <span
+                                            id="ticket_id">0001</span>
+                                    </div>
+                                    <div class="date">
+                                        <label for="" class="form-label">Date:</label> <span id="ticket_date">1
+                                            Day ago</span>
+                                    </div>
                                 </div>
-                                <div class="department">
-                                    IT Unit
+                                <div class="employee-detail">
+                                    <label for="" class="form-label">Employee Details</label>
+                                    <div class="commonname" id="cn">
+                                        Castel Charles Nicolas
+                                    </div>
+                                    <div class="department" id="department">
+                                        IT Unit
+                                    </div>
+                                    <div class="title" id="title">
+                                        Support Officer
+                                    </div>
                                 </div>
-                                <div class="title">
-                                    Support Officer
+                                <div class="issue-attachment">
+                                    No Attachment
                                 </div>
                             </div>
                             <div class="issue-descrip">
                                 <label for="" class="form-label">Issue Title</label>
-                                <div class="title">
+                                <div class="title" id="issue_title">
                                     Issue with Network Connection
                                 </div>
                                 <label for="" class="form-label">Issue Description</label>
-                                <div class="description">
-                                    The computer crashes randomly during usage. When the crash occurs,
-                                    the screen goes black, and the system completely freezes. I am unable to use the
-                                    mouse or keyboard, and the computer doesn't respond to any input. I have to hold
-                                    down the power button for 10 seconds to force a shutdown and then restart the
-                                    computer. Upon restarting,
+                                <div class="description" id="description">
                                 </div>
                             </div>
-                            <div class="issue-attachment">
-                                No Attachment
+                            <div class="action">
+                                <div class="mb-3">
+                                    <label for="    " class="form-label">Issue Type</label>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Unassigned</option>
+                                        <option>Network</option>
+                                        <option value="1">Hardware</option>
+                                        <option value="2">Software</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="    " class="form-label">Priority</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="form_select_priority">
+                                        <option selected>Low</option>
+                                        <option value="1">Medium</option>
+                                        <option value="2">High</option>
+                                        <option value="2">Critical</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="    " class="form-label">Assign to</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="form_select_tech">
+                                        <option selected>Unassigned</option>
+                                        @foreach ($technicians as $technician)
+                                            <option value="{{ $technician['samaccountname'] }}">{{ $technician['cn'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="    " class="form-label">Status</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="form_select_status">
+                                        <option selected>Open</option>
+                                        <option value="1">In Progress</option>
+                                        <option value="2">Closed</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="action">
-                            <div class="mb-3">
-                                <label for="    " class="form-label">Issue Type</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Unassigned</option>
-                                    <option>Network</option>
-                                    <option value="1">Hardware</option>
-                                    <option value="2">Software</option>
-                                </select>
+                        <div class="comment">
+                            <div class="comment-section">
+                                <div class="a-comment">
+                                    <div class="profile">
+                                    </div>
+                                    <div class="commentt">
+                                        <div class="name">
+                                            Castel Charles Nicolas
+                                        </div>
+                                        <div class="the-comment">
+                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="a-comment">
+                                    <div class="profile">
+                                    </div>
+                                    <div class="commentt">
+                                        <div class="name">
+                                            Castel Charles Nicolas
+                                        </div>
+                                        <div class="the-comment">
+                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="    " class="form-label">Priority</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Low</option>
-                                    <option value="1">Medium</option>
-                                    <option value="2">High</option>
-                                    <option value="2">Critical</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="    " class="form-label">Assign to</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Unassigned</option>
-                                    <option>Castel Charles Nicolas</option>
-                                    <option value="1">John Doe</option>
-                                    <option value="2">Ligma ball</option>
-                                    <option value="2">Sarah How</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="    " class="form-label">Status</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open</option>
-                                    <option value="1">In Progress</option>
-                                    <option value="2">Closed</option>
-                                </select>
+                            <div class="comment-input">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Comments or Notes"
+                                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <button class="btn btn-primary  " type="button" id="button-addon2">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -407,23 +467,100 @@
 
         function openModali(btn) {
             const row = btn.closest('.item-row');
+            const id = row.querySelector('.item-id').textContent
             const date = row.querySelector('.date').textContent;
             const user = row.querySelector('.commonname').textContent;
             const department = row.querySelector('.department').textContent;
             const title = row.querySelector('.title').textContent;
+            const description = row.querySelector('.item-description').textContent;
             const itemType = row.querySelector('.item-type').textContent;
             const issueTitle = row.querySelector('.item-title').textContent;
             const assignment = row.querySelector('.item-assignment').textContent;
-            const priority = row.querySelector('.priority').textContent;
-            const status = row.querySelector('.item-status').textContent;
+            const priority = row.querySelector('.priority span')?.className;
+            const status = row.querySelector('.item-status span')?.className;
+            const select_status = document.getElementById('form_select_status');
+            const select_priority = document.getElementById('form_select_priority');
+            const select_tech = document.getElementById('form_select_tech');
 
-            console.log(formatText(user));
-            console.log(formatText(issueTitle));
+            console.log(formatText(priority));
+
+            document.getElementById('ticket_id').innerHTML = formatText(id).padStart(6, '0');
+            document.getElementById('cn').innerHTML = formatText(user);
+            document.getElementById('department').innerHTML = formatText(department);
+            document.getElementById('title').innerHTML = formatText(title);
+            document.getElementById('issue_title').innerHTML = formatText(issueTitle);
+            document.getElementById('description').innerHTML = formatText(description);
+            document.getElementById('ticket_date').innerHTML = formatText(date);
+
+            if (status && select_status) {
+                let valueToSelect = "";
+
+                switch (status.toLowerCase()) {
+                    case "open":
+                        valueToSelect = "Open";
+                        break;
+                    case "inprogress":
+                        valueToSelect = "In Progress";
+                        break;
+                    case "closed":
+                        valueToSelect = "Closed";
+                        break;
+                }
+                for (let option of select_status.options) {
+                    if (option.text.trim() === valueToSelect) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            let found = false;
+            for (let option of select_tech.options) {
+                if (option.text.trim().toLowerCase() === formatText(assignment).toLowerCase()) {
+                    option.selected = true;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                for (let option of select_tech.options) {
+                    if (option.text.trim().toLowerCase() === 'unassigned') {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            if (priority && select_priority) {
+                let valueToSelect = "";
+
+                switch (priority.toLowerCase()) {
+                    case "low":
+                        valueToSelect = "Low";
+                        break;
+                    case "medium":
+                        valueToSelect = "Medium";
+                        break;
+                    case "high":
+                        valueToSelect = "High";
+                        break;
+                    case "critical":
+                        valueToSelect = "Critical";
+                        break;
+                }
+                for (let option of select_priority.options) {
+                    if (option.text.trim() === valueToSelect) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+
+            }
 
             function formatText(text) {
                 text = text.trim();
                 text = text.replace(/\s+/g, ' ');
-                text = text.charAt(0).toUpperCase() + text.slice(1);
+                text = text.charAt(0) + text.slice(1);
                 return text;
             }
         }

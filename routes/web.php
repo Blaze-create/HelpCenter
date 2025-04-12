@@ -12,11 +12,15 @@ Route::get('/login', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [MainController::class, 'home'])->name('home');
-    Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [MainController::class, 'dashboardIndex'])->name('dashboard');
+    Route::get('/user-management', [MainController::class, 'userIndex'])->name('user');
+
+    Route::get('/get-user/{filter}', [MainController::class, 'getUser'])->name('getUser');
+    Route::post('/add-user', [MainController::class, 'addUser'])->name('Add_User');
 });
 
 
 
 Route::post('/user-login', [MainController::class, 'login'])->name('user.login');
 Route::post('/submit_ticket', [MainController::class, 'submit_ticket'])->name('submit_ticket');
-Route::post('/logout',[MainController::class,'destroy'])->name('logout');
+Route::post('/logout', [MainController::class, 'destroy'])->name('logout');
