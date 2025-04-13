@@ -75,8 +75,6 @@ class MainController extends Controller
             $path = $request->file('attachment')->store('attachments', 'public');
         }
 
-
-
         Ticket::create([
             'samaccountname' => session('samaccountname'),
             'title' => $validated['title'],

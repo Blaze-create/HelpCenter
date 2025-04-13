@@ -371,6 +371,8 @@
                                         <option value="2">Critical</option>
                                     </select>
                                 </div>
+
+                                {{-- TODO: change technicians ldap to technician sql  --}}
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Assign to</label>
                                     <select class="form-select" aria-label="Default select example" id="form_select_tech"
