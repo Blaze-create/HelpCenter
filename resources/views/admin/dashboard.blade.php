@@ -57,7 +57,6 @@
                 <div class="status">Status</div>
                 <div class="action">Action</div>
             </div>
-
             @foreach ($ongoing_tickets as $ticket)
                 @php
                     $commonname = '';
@@ -357,15 +356,15 @@
                                     <label for="    " class="form-label">Issue Type</label>
                                     <select class="form-select" aria-label="Default select example">
                                         <option selected>Unassigned</option>
-                                        <option>Network</option>
-                                        <option value="1">Hardware</option>
-                                        <option value="2">Software</option>
+                                        @foreach ($issueTypes as $issueType)
+                                            <option value="{{ $issueType->type }}">{{ $issueType->type }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Priority</label>
                                     <select class="form-select" aria-label="Default select example"
-                                        id="form_select_priority">
+                                        id="form_select_priority"@if (!$userRole) disabled @endif>
                                         <option selected>Low</option>
                                         <option value="1">Medium</option>
                                         <option value="2">High</option>
@@ -374,8 +373,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Assign to</label>
-                                    <select class="form-select" aria-label="Default select example"
-                                        id="form_select_tech">
+                                    <select class="form-select" aria-label="Default select example" id="form_select_tech"
+                                        @if (!$userRole) disabled @endif>
                                         <option selected>Unassigned</option>
                                         @foreach ($technicians as $technician)
                                             <option value="{{ $technician['samaccountname'] }}">{{ $technician['cn'] }}
