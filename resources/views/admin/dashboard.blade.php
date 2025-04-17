@@ -1,50 +1,32 @@
-@extends('layouts.default')
+@extends('layouts.dash')
 @section('content')
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark" style="padding-right: 10px;padding-left: 10px  ;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">HelpCenter ICT</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Ticket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">User management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">FAQ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Analyst</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container-fluid">
         <div class="dashboard-title">
             <div class="title">
                 <h1>Ongoing Tickets</h1>
                 <span>Showing {{ count($ongoing_tickets) }} of {{ count($ongoing_tickets) }} </span>
             </div>
-            <div class="sidetab">
+
+            <form class="sidetab"method="GET" action="{{ route('dashboard') }}" id="filterForm">
+                <select class="form-select" aria-label="Default select example" style="width:200px;" name="filter"
+                    onchange="this.form.submit()">
+                    <option value="">-- Sort By --</option>
+                    <option value="date_desc" {{ request('filter') == 'date_desc' ? 'selected' : '' }}>Newest First</option>
+                    <option value="date_asc" {{ request('filter') == 'date_asc' ? 'selected' : '' }}>Oldest First</option>
+                    <option value="priority" {{ request('filter') == 'priority' ? 'selected' : '' }}>Priority</option>
+                </select>
                 <div class="search">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <div class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search tickets..."
+                            value="{{ request('search') }}">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
+
         </div>
     </div>
+
     <div class="container-fluid item-table">
         <div class="item-wrapper">
             <div class="table-heading">
@@ -57,6 +39,7 @@
                 <div class="status">Status</div>
                 <div class="action">Action</div>
             </div>
+
             @foreach ($ongoing_tickets as $ticket)
                 @php
                     $commonname = '';
@@ -72,7 +55,7 @@
                             break;
                         }
                     }
-                    foreach ($user_cn as $user) {
+                    foreach ($techDetail as $user) {
                         if ($user['samaccountname'] == $ticket->assigned_to) {
                             $assigned_to = $user['cn'];
                             break;
@@ -305,7 +288,8 @@
     <div class="modal fade" data-bs-backdrop="static" id="view" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
-            <form class="modal-content" id="addForm">
+            <form class="modal-content" id="updateForm" method="post" action="">
+                @csrf
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">
                         Taking Action on ticket
@@ -354,7 +338,7 @@
                             <div class="action">
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Issue Type</label>
-                                    <select class="form-select" aria-label="Default select example">
+                                    <select class="form-select" aria-label="Default select example" name="category">
                                         <option selected>Unassigned</option>
                                         @foreach ($issueTypes as $issueType)
                                             <option value="{{ $issueType->type }}">{{ $issueType->type }}</option>
@@ -364,11 +348,12 @@
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Priority</label>
                                     <select class="form-select" aria-label="Default select example"
-                                        id="form_select_priority"@if (!$userRole) disabled @endif>
-                                        <option selected>Low</option>
-                                        <option value="1">Medium</option>
-                                        <option value="2">High</option>
-                                        <option value="2">Critical</option>
+                                        id="form_select_priority"@if (!$userRole) disabled @endif
+                                        name="priority">
+                                        <option selected value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical</option>
                                     </select>
                                 </div>
 
@@ -376,9 +361,9 @@
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Assign to</label>
                                     <select class="form-select" aria-label="Default select example" id="form_select_tech"
-                                        @if (!$userRole) disabled @endif>
+                                        @if (!$userRole) disabled @endif name="assigned_to">
                                         <option selected>Unassigned</option>
-                                        @foreach ($technicians as $technician)
+                                        @foreach ($techDetail as $technician)
                                             <option value="{{ $technician['samaccountname'] }}">{{ $technician['cn'] }}
                                             </option>
                                         @endforeach
@@ -387,10 +372,10 @@
                                 <div class="mb-3">
                                     <label for="    " class="form-label">Status</label>
                                     <select class="form-select" aria-label="Default select example"
-                                        id="form_select_status">
-                                        <option selected>Open</option>
-                                        <option value="1">In Progress</option>
-                                        <option value="2">Closed</option>
+                                        id="form_select_status" name="status">
+                                        <option selected value="open">Open</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="closed">Closed</option>
                                     </select>
                                 </div>
                             </div>
@@ -433,10 +418,20 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                        data-bs-title="Save changes">Save</button>
+                    @if (!$userRole)
+                        <button type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                            data-bs-title="Closed the ticket as Resolved" id="resolve">
+                            Resolve
+                        </button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                            data-bs-title="Accept the ticket and change its status to 'in progress'" id="accept">
+                            Accept
+                        </button>
+                        <button type="button" class="btn btn-danger"
+                            data-bs-toggle="tooltip"data-bs-title='Escalate ticket to higher support unit'>Escalate</button>
+                    @endif
                 </div>
             </form>
         </div>
@@ -482,8 +477,18 @@
             const select_status = document.getElementById('form_select_status');
             const select_priority = document.getElementById('form_select_priority');
             const select_tech = document.getElementById('form_select_tech');
+            const form = document.getElementById('updateForm');
 
-            console.log(formatText(priority));
+            const resolve = document.getElementById('resolve');
+            const accept = document.getElementById('accept');
+
+            if (formatText(status) == 'open') {
+                resolve.style.display = 'none';
+                accept.style.display = 'block';
+            } else {
+                accept.style.display = 'none';
+                resolve.style.display = 'block';
+            }
 
             document.getElementById('ticket_id').innerHTML = formatText(id).padStart(6, '0');
             document.getElementById('cn').innerHTML = formatText(user);
@@ -492,6 +497,9 @@
             document.getElementById('issue_title').innerHTML = formatText(issueTitle);
             document.getElementById('description').innerHTML = formatText(description);
             document.getElementById('ticket_date').innerHTML = formatText(date);
+
+            const updateURL = "{{ route('updateTicket', ['id' => 'PLACEHOLDER']) }}";
+            form.action = updateURL.replace('PLACEHOLDER', formatText(id));
 
             if (status && select_status) {
                 let valueToSelect = "";

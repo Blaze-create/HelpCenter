@@ -638,4 +638,56 @@
   background: #0178ff;
   border: 1px solid #0178ff;
   color: white;
+}
+
+.user-view h6 {
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+.user-view h6:not(:first-child) {
+  margin-top: 15px;
+}
+.user-view .user-profile {
+  display: flex;
+  gap: 15px;
+}
+.user-view .user-profile .profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgb(0, 132, 255);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-view .user-profile .user-detail .title {
+  font-size: 13px;
+  opacity: 0.7;
+}
+.user-view .user-job {
+  display: flex;
+  gap: 25px;
+  padding-left: 65px;
+}
+.user-view .user-job .user-title .title,
+.user-view .user-job .user-department .title {
+  font-size: 13px;
+  opacity: 0.7;
+}
+.user-view .user-position {
+  display: flex;
+  justify-content: space-evenly;
+}
+.user-view .user-ticket {
+  display: flex;
+  justify-content: space-evenly;
+}
+.user-view .user-ticket .title {
+  font-size: 13px;
+  opacity: 0.7;
+}
+.user-view .user-ticket .name {
+  font-size: 24px;
+  letter-spacing: 3px;
 }/*# sourceMappingURL=style.css.map */

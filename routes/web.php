@@ -20,11 +20,14 @@ Route::middleware('auth')->group(function () {
 
     // DASHBOARD TICKET
     Route::get('/dashboard/{filter?}', [DashController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/updateTicket/{id}', [DashController::class, 'updateTicket'])->name('updateTicket');
 
     // DASHBOARD USER 
     Route::get('/user-management', [UserController::class, 'index'])->name('user');
     Route::get('/get-user/{filter}', [UserController::class, 'getUser'])->name('getUser');
     Route::post('/add-user', [UserController::class, 'addUser'])->name('Add_User');
+    Route::get('/dashboard/get-user-data/{id}', [UserController::class, 'getUserData'])->name('getUserData');
+    Route::post('/dashboard/updateUser/{id}', [UserController::class, 'updateUser'])->name('updateUser');
 });
 
 

@@ -1,34 +1,5 @@
-@extends('layouts.default')
+@extends('layouts.dash')
 @section('content')
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark" style="padding-right: 10px;padding-left: 10px  ;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">HelpCenter ICT</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Ticket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">User management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">FAQ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Analyst</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
         <div class="dashboard-title">
             <div class="title">
@@ -83,6 +54,9 @@
                 @endphp
                 <div class="item-row user">
                     <div class="user-detail">
+                        <div class="item-id">
+                            {{ $user->id }}
+                        </div>
                         <div class="commonname">
                             {{ $commonname }}
                         </div>
@@ -115,7 +89,8 @@
                         </div>
                     @endif
                     <div class="item-action">
-                        <button type="button" class="btn btn-primary">View</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#view">View</button>
                     </div>
                 </div>
             @endforeach
@@ -123,11 +98,89 @@
     </div>
 
 
+    <div class="modal fade" data-bs-backdrop="static" id="view" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content" id="updateUser" method="post" action="">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Viewing User detail
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-view">
+                        <h6>User Detail</h6>
+                        <div class="user-profile">
+                            <div class="profile">
+                                M
+                            </div>
+                            <div class="user-detail">
+                                <div class="title">Full Name</div>
+                                <div class="name" id="cn">Castel Charles Nicolas</div>
+                                <div class="title">Email</div>
+                                <div class="name" id="mail">charlescastel4@gmail.com</div>
+                            </div>
+                        </div>
+                        <div class="user-job">
+                            <div class="user-title">
+                                <div class="title">Title</div>
+                                <div class="name" id="title">IT Support Officer</div>
+                            </div>
+                            <div class="user-department">
+                                <div class="title">Department</div>
+                                <div class="name" id="department">IT Unit</div>
+                            </div>
+                        </div>
+                        <h6>User Position</h6>
+                        <div class="user-position">
+                            <div class="mb-3">
+                                <label for="    " class="form-label">Issue Type</label>
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Unassigned</option>
+                                    @foreach ($issues as $issue)
+                                        <option value="{{ $issue->type }}">{{ $issue->type }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="    " class="form-label">User Role</label>
+                                <select class="form-select" aria-label="Default select example">
+                                    <option>Admins</option>
+                                    <option value="1" selected>Technicians</option>
+                                </select>
+                            </div>
+                        </div>
+                        <h6>User tickets details</h6>
+                        <div class="user-ticket">
+                            <div class="ticket-active">
+                                <div class="title">Tickets Active:</div>
+                                <div class="name" id="active">10</div>
+                            </div>
+                            <div class="ticket-close">
+                                <div class="title">Tickets resolved & Closed</div>
+                                <div class="name" id="closed">100</div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
 
-    <div class="modal fade" id="add_user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="add_user" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <form class="modal-content" id="addForm" action="{{ route('Add_User') }}" method="post">
                 @csrf
@@ -162,9 +215,9 @@
                         <label for="    " class="form-label">Select preferred issue type for automatic task
                             assignment:</label>
                         <select class="form-select" aria-label="Default select example" name="type">
-                            <option selected value="Network">Network</option>
-                            <option value="Software">Software</option>
-                            <option value="Hardware">Hardware</option>
+                            @foreach ($issues as $issue)
+                                <option value="{{ $issue->type }}">{{ $issue->type }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -246,18 +299,59 @@
             });
         }
 
-        // document.getElementById('addForm').addEventListener('submit', function(event) {
-        //     event.preventDefault(); // prevent actual form submission
+        document.addEventListener('DOMContentLoaded', () => {
+            const btns = document.querySelectorAll('.item-action .btn.btn-primary');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    openModale(this);
+                })
+            })
+        })
 
-        //     const formData = new FormData(this);
+        const viewUserUrl = "{{ route('getUserData', ['id' => 'DUMMY_FILTER']) }}"
+        const fetchUrl = viewUserUrl.replace('DUMMY_FILTER', '');
 
-        //     // Convert to plain object (optional)
-        //     const data = {};
-        //     formData.forEach((value, key) => {
-        //         data[key] = value;
-        //     });
 
-        //     console.log('Form Data:', data);
-        // });
+        function openModale(btn) {
+            const row = btn.closest('.item-row.user');
+            const id = row.querySelector('.item-id').textContent;
+            const user = row.querySelector('.commonname').textContent;
+            const department = row.querySelector('.department').textContent;
+            const title = row.querySelector('.title').textContent;
+            const itemType = row.querySelector('.item-type').textContent;
+            const role = row.querySelector('.role').textContent;
+
+            const form = document.getElementById('updateUser');
+            const updateURL = "{{ route('updateUser', ['id' => 'PLACEHOLDER']) }}";
+            form.action = updateURL.replace('PLACEHOLDER', formatText(id));
+
+            document.getElementById('cn').innerHTML = formatText(user);
+            document.getElementById('title').innerHTML = formatText(title);
+            document.getElementById('department').innerHTML = formatText(department);
+            document.getElementById('mail').innerHTML = '....';
+            document.getElementById('active').innerHTML = '....';
+            document.getElementById('closed').innerHTML = '....';
+
+            const url = `${fetchUrl}${encodeURIComponent(id)}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('active').innerHTML = data.active;
+                    document.getElementById('closed').innerHTML = data.closed;
+                    document.getElementById('mail').innerHTML = data.mail;
+                })
+                .catch(error => {
+                    console.error('Error fetching ticket counts:', error);
+                    document.getElementById('active').innerHTML = 'Error';
+                    document.getElementById('closed').innerHTML = 'Error';
+                });
+        }
+
+        function formatText(text) {
+            text = text.trim();
+            text = text.replace(/\s+/g, ' ');
+            text = text.charAt(0) + text.slice(1);
+            return text;
+        }
     </script>
 @endsection

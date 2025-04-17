@@ -13,6 +13,16 @@ class UserController extends Controller
 {
     public function index()
     {
+        $currentUser = session('samaccountname');
+        $user = internalUser::where('samaccountname', $currentUser)->first();
+        if (!$user) {
+            return redirect()->route('home');
+        }
+        if ($user->role !== 'Admins') {
+            return redirect()->route('dashboard');
+        }
+        $isAdmin = $user->role === 'Admins';
+
         $users = internalUser::all();
         $user_cn = [];
 
@@ -43,13 +53,16 @@ class UserController extends Controller
             }
         }
 
+        $issueType = issueType::all();
 
         return view(
             'admin.user',
             [
                 'users' => $users,
                 'user_cn' => $user_cn,
-                'ticketCounts' => $ticketCounts
+                'ticketCounts' => $ticketCounts,
+                'userRole' => $isAdmin,
+                'issues' => $issueType,
             ]
         );
     }
@@ -80,11 +93,41 @@ class UserController extends Controller
             'role' => 'required|string'
         ]);
 
+        if (internalUser::where('samaccountname', $validated['username'])->exists()) {
+            return redirect()->back()->with('message', ' User already Exists')->with('status', 'Errors');
+        }
+
         internalUser::create([
             'samaccountname' => $validated['username'],
             'type' => $validated['type'],
             'role' => $validated['role']
         ]);
         return redirect()->back()->with('message', 'User Added Successfully');
+    }
+    public function getUserData($id)
+    {
+        $user = internalUser::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not found'
+            ], 404);
+        }
+
+        $samaccountname = $user->samaccountname;
+
+        $user = LdapUser::where('samaccountname', $samaccountname)->first();
+
+        $activeCount = Ticket::where('assigned_to', $samaccountname)
+            ->whereIn('status', ['open', 'in_progress'])
+            ->count();
+        $closedCount = Ticket::where('samaccountname', $samaccountname)
+            ->where('status', 'closed')
+            ->count();
+        return response()->json([
+            'active' => $activeCount,
+            'closed' => $closedCount,
+            'mail' => $user->getAttribute('mail')[0] ?? 'N/A',
+        ]);
     }
 }

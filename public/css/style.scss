@@ -14,9 +14,11 @@
 .home-wrapper {
   height: 100vh;
   width: 100%;
-  background: radial-gradient(circle,
+  background: radial-gradient(
+      circle,
       rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.8) 100%),
+      rgba(0, 0, 0, 0.8) 100%
+    ),
     url("../img/bg.jpg");
   background-size: cover;
   display: flex;
@@ -180,7 +182,7 @@
     span {
       font-weight: bold;
 
-      &:hover+button {
+      &:hover + button {
         transform: scale(1.1);
       }
     }
@@ -686,6 +688,65 @@
       background: #0178ff;
       border: 1px solid #0178ff;
       color: white;
+    }
+  }
+}
+
+.user-view {
+  h6 {
+    // margin-top: 15px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
+  }
+  .user-profile {
+    display: flex;
+    gap: 15px;
+    .profile {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgb(0, 132, 255);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .user-detail {
+      .title {
+        font-size: 13px;
+        opacity: 0.7;
+      }
+    }
+  }
+  .user-job {
+    display: flex;
+    gap: 25px;
+    padding-left: 65px;
+    .user-title,
+    .user-department {
+      .title {
+        font-size: 13px;
+        opacity: 0.7;
+      }
+    }
+  }
+  .user-position {
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .user-ticket {
+    display: flex;
+    justify-content: space-evenly;
+    .title {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+    .name {
+      font-size: 24px;
+      letter-spacing: 3px;
     }
   }
 }
